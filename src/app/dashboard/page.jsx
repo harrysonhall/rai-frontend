@@ -6,6 +6,8 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { ChatSidebar } from "@/components/chat-sidebar"
 import { ChatInterface } from "@/components/chat-interface"
 import { VideoChat } from "@/components/video-chat"
+import { GroupVideoChat } from "@/components/group-video-chat"
+import { MediaPermissions } from "@/components/media-permissions"
 import { SocketProvider, useSocket } from "@/contexts/SocketContext"
 import { Separator } from "@/components/ui/separator"
 import {
@@ -29,6 +31,7 @@ function DashboardContent() {
   const [selectedUser, setSelectedUser] = useState(null)
   const [isVideoCallOpen, setIsVideoCallOpen] = useState(false)
   const [callingUserId, setCallingUserId] = useState(null)
+  const [isGroupCallOpen, setIsGroupCallOpen] = useState(false)
 
   useEffect(() => {
     const token = localStorage.getItem("token")
@@ -147,6 +150,10 @@ function DashboardContent() {
     setActiveChannel(null)
   }
 
+  const handleStartGroupCall = () => {
+    setIsGroupCallOpen(true)
+  }
+
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center">
@@ -188,7 +195,11 @@ function DashboardContent() {
             </Breadcrumb>
           </header>
           <main className="flex-1 overflow-hidden">
-            <ChatInterface channel={activeChannel} messages={messages} />
+            <ChatInterface 
+              channel={activeChannel} 
+              messages={messages} 
+              onStartGroupCall={handleStartGroupCall}
+            />
           </main>
         </div>
       </div>
@@ -197,6 +208,12 @@ function DashboardContent() {
         onClose={() => setIsVideoCallOpen(false)}
         callingUserId={callingUserId}
       />
+      <GroupVideoChat
+        channel={activeChannel}
+        isOpen={isGroupCallOpen}
+        onClose={() => setIsGroupCallOpen(false)}
+      />
+      <MediaPermissions />
     </SidebarProvider>
   )
 }

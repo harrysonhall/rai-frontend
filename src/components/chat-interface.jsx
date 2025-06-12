@@ -1,14 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { Send, Hash, MessageSquare } from "lucide-react"
+import { Send, Hash, MessageSquare, Video, Users } from "lucide-react"
 import { useSocket } from "@/contexts/SocketContext"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { format } from "date-fns"
 
-export function ChatInterface({ channel, messages }) {
+export function ChatInterface({ channel, messages, onStartGroupCall }) {
   const { socket } = useSocket()
   const [newMessage, setNewMessage] = React.useState("")
   const scrollRef = React.useRef(null)
@@ -47,9 +47,21 @@ export function ChatInterface({ channel, messages }) {
   return (
     <div className="flex h-full flex-col">
       <div className="border-b px-6 py-4">
-        <div className="flex items-center gap-2">
-          <Hash className="h-5 w-5 text-muted-foreground" />
-          <h2 className="text-lg font-semibold">{channel.name}</h2>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Hash className="h-5 w-5 text-muted-foreground" />
+            <h2 className="text-lg font-semibold">{channel.name}</h2>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={onStartGroupCall}
+            className="gap-2"
+          >
+            <Video className="h-4 w-4" />
+            <Users className="h-4 w-4" />
+            Start Group Call
+          </Button>
         </div>
       </div>
 
