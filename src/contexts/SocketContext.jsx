@@ -15,7 +15,8 @@ export function SocketProvider({ children }) {
 
     const newSocket = io(window.location.origin, {
       auth: { token },
-      path: '/socket.io/'
+      path: '/socket.io/',
+      transports: ['websocket', 'polling']
     })
 
     newSocket.on('connect', () => {
